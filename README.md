@@ -5,6 +5,8 @@
 DAIC 은 자연어 처리와 RAG(Retrieval Augmented Generation) 기술을 활용하여 사용자의 데이터를 분석하고 시각화하는 지능형 플랫폼입니다. 사용자는 XML 파일을 업로드하고 자연어로 질문하면 AI가 데이터를 분석하여 인사이트를 제공하고 적절한 시각화를 생성합니다.
 단방향 LLM 대화로 인한 학습 속도의 저하가 있던 기존의 DataVision 프로젝트에서, DB Storage를 RAG 기술을 활용하여 적절한 Fine-tuning 과 Context Chunk 를 이용하여 해결하는 것이 목표입니다.
 
+https://github.com/user-attachments/assets/8fa74095-1a5c-4066-99d4-fb89475c2400
+
 TO-BE FLOWCHART
 ```mermaid
 graph TD
