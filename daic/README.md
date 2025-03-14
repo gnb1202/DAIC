@@ -19,6 +19,9 @@ npm install prisma @prisma/client
 npx prisma init
 ```
 
+edit local .env file for replacing API KEYS.
+
+
 run the development server:
 ```
 bash
