@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  extensions = [pgvector(version: "0.4.0")]
+}
+
+// 사용자 모델
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  name          String?
+  dataFiles     DataFile[]
+  chatSessions  ChatSession[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+// 데이터 파일 모델
+model DataFile {
+  id            String         @id @default(cuid())
+  name          String
+  description   String?
+  fileType      String         // 'xml', 'csv', 'json' 등
+  content       String         // 원본 파일 내용
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
+  chunks        Chunk[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+// 청크 모델 (벡터 저장)
+model Chunk {
+  id            String         @id @default(cuid())
+  content       String
+  metadata      Json?          // 추가 메타데이터
+  embedding     Unsupported("vector(1536)")
+  fileId        String
+  file          DataFile       @relation(fields: [fileId], references: [id])
+  createdAt     DateTime       @default(now())
+}
+
+// 채팅 세션 모델
+model ChatSession {
+  id            String         @id @default(cuid())
+  name          String?
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
+  messages      ChatMessage[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+// 채팅 메시지 모델
+model ChatMessage {
+  id            String         @id @default(cuid())
+  role          String         // 'user' 또는 'assistant'
+  content       String
+  sessionId     String
+  session       ChatSession    @relation(fields: [sessionId], references: [id])
+  createdAt     DateTime       @default(now())
+}
+
+// 시각화 모델
+model Visualization {
+  id            String         @id @default(cuid())
+  name          String
+  type          String         // 'bar', 'line', 'pie' 등
+  data          Json
+  sessionId     String?
+  userId        String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
